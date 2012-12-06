@@ -1,0 +1,43 @@
+sym_table = new_symtab();
+struct_table = new_symtab();
+blockno_stack = new_block_stack();
+ident_stack = new_ident_stack();
+
+
+struct symnode {            //typedefd as *symnode_ref
+    stringnode_ref strnode_entry;
+    bitset_t attribute;
+    //pointer to struct table node
+    //pptr to field table
+    int file, line, offset;
+    int blockno;
+    astree parameter_list;
+    ident_stack_ref ident_stack_next;
+    symnode_ref next;
+};
+
+//astree node
+struct astree_rep {
+   char *tag;                 // tag field to verify class membership
+   int symbol;                // token code
+   int filenr;                // index into filename stack
+   int linenr;                // line number from source code
+   int offset;                // offset of token with current line
+   stringnode_ref lexinfo;    // pointer to lexical information
+   astree first;              // first child node of this node
+   astree last;               // last child node of this node
+   astree next;               // next younger sibling of this node
+   bitset_t attribute;        // attributes of node
+   int blockno;               // scoping
+   //struct_table* struct_tb; 
+};
+
+struct blockno_stack {      //stack of block numbers
+    int block_count;
+    blockno_stack_ref next;
+};
+
+struct ident_stack {        //identifier stack
+    symnode_ref symnode_entry;
+    ident_stack_ref next;
+};
