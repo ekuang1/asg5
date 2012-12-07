@@ -12,7 +12,33 @@
 
 //REMEMBER TO USE BIGSWITCH_E OR E_TYPE
 
+struct strcon_queue {
+    astree node;
+    strcon_queueref next;
+    char global_strname[25];
+};
+
+
 int vreg_counter = 1;
+strcon_queueref queue;
+
+
+void queue_stringcon (astree node) {
+    strcon_queueref temp = malloc (sizeof (struct strcon_queue));
+    temp->node = node;
+    temp->next = NULL;
+        
+    if (queue == NULL)
+        queue = temp;
+    else {
+        strcon_queueref curr = queue;
+        while (curr->next != NULL)
+            curr = curr->next;
+        curr->next = temp;
+    }
+                
+}
+
 
 void prolog_generation(FILE* IN) {
     fprintf(IN, "#define __OCLIB_C__\n");
@@ -20,7 +46,6 @@ void prolog_generation(FILE* IN) {
 }
 
 void print_indents(FILE *IN) {  //print 8 spaces
-    //if (node->blockno != 0)
     fprintf(IN, "%8s", "");
 }
 
@@ -66,7 +91,7 @@ void e_array (void) {
 }
 
 void e_ident (astree node) {
-    fprintf(writeto_oil, "_%s", peek_stringtable(node->lexinfo));
+    //fprintf(writeto_oil, "_%s", peek_stringtable(node->lexinfo));
 }
 
 void e_field (astree node) {
@@ -142,30 +167,25 @@ void e_return (astree node) {
 }
 
 char *vreg_type (astree node) {
-    switch (node->symbol)
-    {
-        case TOK_CHAR:
-            return "char b";
-            break;
-        case TOK_BOOL:
-            return "bool b";
-            break;
-        case TOK_STRING:
-            return "string s";
-            break;
-        case TOK_INT:
-            return "int i";
-            break;
-        default:
-            printf("the fuck happened here!\n");
-            return "";
-            break;
-    }
+    
+    if (is_int(node->first->attribute) && is_int(node->last->attribute))
+        return "int i";
+    else if (is_char(node->first->attribute) && is_char(node->last->attribute))
+        return "ubyte b";
+    else if (is_bool(node->first->attribute) && is_bool(node->last->attribute))
+        return "ubyte b";
+    else if (is_string(node->first->attribute) && is_string(node->last->attribute))
+        return "ubyte s";
+    
+    return "you fucked up";
 }
 
 
 void e_binaryop (astree node) {
-    //sprintf(node->vreg, "%s%d = ", vreg_type(node), vreg_counter++);
+    sprintf(node->vreg, "%s%d = ", vreg_type(node), vreg_counter++);
+    
+    
+    fprintf(writeto_oil, "%s", node->vreg);
     
     bigswitch_e (node->last);
     fprintf(writeto_oil, " %s ", peek_stringtable(node->lexinfo));
@@ -173,12 +193,21 @@ void e_binaryop (astree node) {
     //fprintf(writeto_oil, ";\n");
 }
 
+void e_vardecl (astree node) {
+    bigswitch_e(node->first);   //type
+    bigswitch_e(node->last);    //constant
+    
+}
 
 void bigswitch_e (astree node) {
     printf("at node %s blockno %d\n", get_yytname (node->symbol), 
                                         get_blockno (blockno_stack));
     switch (node->symbol)
     {
+        case TOK_VARDECL:
+            e_vardecl(node);
+            break;
+    
         case TOK_RETURN:
             e_return(node);
             break;
@@ -268,6 +297,21 @@ void bigswitch_e (astree node) {
     }
 }
 
+void global_children (astree node) {    //children of root that aren't func/struct
+    astree temp = node->first;
+    while (temp != NULL) {
+        //while stmt break
+        
+        //ifelse stmt break
+        
+        //if stmt break
+    
+        bigswitch_e(temp);
+        temp = temp->next;
+    }
+
+}
+
 void global_emission (astree node) {
 	//generate a prolog
 	prolog_generation(writeto_oil);
@@ -282,7 +326,15 @@ void global_emission (astree node) {
     
     //all string constants are given names
     
+    
     //output all global variables, immediate children of the root
+    temp = node->first;
+    while (temp != NULL) {
+        if (!is_function(temp->attribute) && !is_struct(temp->attribute))
+            bigswitch_e(node);
+        temp = temp->next;
+    }
+    
     
     //all functions are output
     temp = node->first;

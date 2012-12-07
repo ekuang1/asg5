@@ -1,0 +1,21 @@
+# Makefile.deps created Thu Dec  6 15:19:47 PST 2012 by make
+astree.o: astree.c astree.h auxlib.h astree.rep.h stringtable.h strhash.h \
+ sym_tab.h lyutils.h mylib.h yyparse.h attributes.h
+lyutils.o: lyutils.c astree.rep.h astree.h auxlib.h stringtable.h \
+ strhash.h sym_tab.h lyutils.h mylib.h yyparse.h
+main.o: main.c mylib.h stringtable.h strhash.h auxlib.h astree.h \
+ astree.rep.h sym_tab.h lyutils.h yyparse.h emission.h
+auxlib.o: auxlib.c auxlib.h
+strhash.o: strhash.c strhash.h auxlib.h
+stringtable.o: stringtable.c stringtable.h strhash.h auxlib.h
+mylib.o: mylib.c mylib.h stringtable.h strhash.h auxlib.h astree.h
+attributes.o: attributes.c attributes.h
+sym_tab.o: sym_tab.c sym_tab.h stringtable.h strhash.h auxlib.h astree.h \
+ attributes.h astree.rep.h
+emission.o: emission.c emission.h astree.h auxlib.h astree.rep.h \
+ stringtable.h strhash.h sym_tab.h lyutils.h mylib.h yyparse.h \
+ attributes.h
+yylex.o: yylex.c auxlib.h lyutils.h astree.h mylib.h stringtable.h \
+ strhash.h yyparse.h
+yyparse.o: yyparse.c lyutils.h astree.h auxlib.h mylib.h stringtable.h \
+ strhash.h yyparse.h astree.rep.h sym_tab.h

@@ -22,7 +22,7 @@ struct astree_rep {
    int blockno;               // scoping
    char *blockstruct;
    symnode_ref struct_node;
-   char *vreg;
+   char vreg[25];
 };
 
 

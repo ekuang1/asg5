@@ -1,0 +1,29 @@
+ROOT "" 0.0.0 {0} 
+|  STRUCT "struct" 3.1.0 {0}  struct
+|  |  TYPEID "foo" 3.1.7 {foo}  struct typeid
+|  |  |  INT "int" 3.2.4 {foo}  int
+|  |  |  |  FIELD "k" 3.2.8 {foo}  int variable field lvalue
+|  |  |  BOOL "bool" 3.3.4 {foo}  bool
+|  |  |  |  ARRAY "[]" 3.3.8 {0}  array
+|  |  |  |  FIELD "t" 3.3.11 {foo}  bool variable field lvalue
+|  ';' ";" 3.4.1 {0} 
+|  VARDECL "=" 3.7.6 {0} 
+|  |  INT "int" 3.7.0 {0}  int
+|  |  |  DECLID "a" 3.7.4 {0}  int variable lvalue
+|  |  INTCON "3" 3.7.8 {0}  int const
+|  VARDECL "=" 3.8.11 {0} 
+|  |  STRING "string" 3.8.0 {0}  string
+|  |  |  DECLID "bar" 3.8.7 {0}  string variable lvalue
+|  |  IDENT "NULL" 3.8.13 {0} 
+|  VARDECL "=" 3.9.6 {0} 
+|  |  INT "int" 3.9.0 {0}  int
+|  |  |  DECLID "b" 3.9.4 {0}  int variable lvalue
+|  |  IDENT "a" 3.9.8 {0}  int variable lvalue
+|  WHILE "while" 3.11.0 {0} 
+|  |  LT "<" 3.11.10 {0}  bool vreg
+|  |  |  INTCON "5" 3.11.12 {0}  int const
+|  |  |  INTCON "4" 3.11.8 {0}  int const
+|  |  BLOCK "{" 3.11.15 {0} 
+|  |  |  '+' "+" 3.12.6 {1}  int vreg
+|  |  |  |  INTCON "3" 3.12.8 {1}  int const
+|  |  |  |  INTCON "2" 3.12.4 {1}  int const

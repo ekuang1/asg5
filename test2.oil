@@ -1,8 +1,7 @@
 #define __OCLIB_C__
 include "oclib.oh"
 
-int __add (
-        int _1_a;
-        int _1_b;
-{
-        _a + _b + _c;
+struct s_foo {
+        int f_foo_k;
+        ubyte *f_foo_t;
+};

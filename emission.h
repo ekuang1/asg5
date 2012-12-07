@@ -3,6 +3,8 @@
 
 #include "astree.h"
 
+typedef struct strcon_queue *strcon_queueref;
+
 void global_emission (astree node);
 
 void bigswitch_e (astree node);
